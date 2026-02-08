@@ -6,173 +6,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    body {
-        margin: 0;
-        font-family: 'Georgia', serif;
-        background: linear-gradient(135deg, #ffe0ec, #fff7fb);
-        color: #4a1c2a;
-        scroll-behavior: smooth;
-    }
+body {
+    margin: 0;
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, #ffe0ec, #fff7fb);
+    color: #4a1c2a;
+    scroll-behavior: smooth;
+}
 
-    section {
-        min-height: 100vh;
-        padding: 70px 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-    }
+section {
+    min-height: 100vh;
+    padding: 70px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
-    h1 {
-        font-size: 3em;
-        margin-bottom: 15px;
-    }
+h1, h2 {
+    margin-bottom: 20px;
+}
 
-    h2 {
-        font-size: 2.2em;
-        margin-bottom: 20px;
-    }
+p {
+    max-width: 760px;
+    font-size: 1.15em;
+    line-height: 1.8;
+}
 
-    p {
-        max-width: 750px;
-        font-size: 1.15em;
-        line-height: 1.8;
-        margin-bottom: 18px;
-    }
+.heart {
+    font-size: 3em;
+    animation: pulse 1.5s infinite;
+}
 
-    .heart {
-        font-size: 3em;
-        animation: pulse 1.5s infinite;
-        margin-bottom: 15px;
-    }
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
 
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.25); }
-        100% { transform: scale(1); }
-    }
+.btn {
+    padding: 14px 34px;
+    border-radius: 30px;
+    background: #ff6f91;
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    margin-top: 30px;
+    border: none;
+    cursor: pointer;
+}
 
-    .btn {
-        padding: 14px 32px;
-        border-radius: 30px;
-        background: #ff6f91;
-        color: white;
-        text-decoration: none;
-        font-size: 1em;
-        margin-top: 25px;
-        transition: 0.3s;
-    }
+.btn:hover {
+    background: #ff3f6f;
+}
 
-    .btn:hover {
-        background: #ff3f6f;
-    }
+/* PASSWORD MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
 
-    footer {
-        padding: 40px 20px;
-        background: #ffd1e3;
-        font-size: 1.1em;
-        text-align: center;
-    }
+.modal-box {
+    background: #fff0f6;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+input {
+    padding: 12px;
+    width: 80%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-top: 15px;
+}
+
+.error {
+    color: #ff3f6f;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform: scale(0.9);}
+    to {opacity:1; transform: scale(1);}
+}
+
+/* GALLERY */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 40px;
+}
+
+.gallery img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.gallery img:hover {
+    transform: scale(1.08);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+/* POPUP SURPRISE */
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1200;
+}
+
+.popup-box {
+    background: #fff7fb;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 450px;
+    text-align: center;
+}
 </style>
 </head>
 
 <body>
 
-<!-- SECTION 1 -->
-<section>
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<section onclick="playMusic()">
     <div class="heart">❤️</div>
-    <h1>Happy Birthday, Monika</h1>
+    <h1>Happy Birthday Monika</h1>
     <p>
-        This website isn’t just a birthday wish.  
-        It’s a small reflection of how special you are to me.
+        This page is soft, expressive, emotional —  
+        just like you, Bujji.
     </p>
-    <p>
-        Today is about <strong>you</strong>, Bujji —  
-        and everything you bring into my life.
-    </p>
-    <a href="#story" class="btn">Come with me 💌</a>
+    <button class="btn" onclick="openGallery()">Open Our Memories 🔐</button>
+    <button class="btn" onclick="openSurprise()">Only for my Bujji 💌</button>
 </section>
 
-<!-- SECTION 2 -->
-<section id="story">
-    <h2>Us, Every Day</h2>
+<!-- PASSWORD MODAL -->
+<div class="modal" id="passwordModal">
+  <div class="modal-box">
+    <h2>Enter the magic word 💖</h2>
+    <input type="password" id="passwordInput" placeholder="Hint: our nickname 😉">
+    <br><br>
+    <button class="btn" onclick="checkPassword()">Unlock ❤️</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+</div>
+
+<!-- GALLERY SECTION -->
+<section id="gallerySection" style="display:none">
+    <h2>My Favorite Sketches of You</h2>
     <p>
-        We talk every day — on mobile, WhatsApp, Teams —  
-        sharing little things, big thoughts, and everything in between.
+        Each sketch holds a piece of how I see you —  
+        beautiful, expressive, and deeply loved.
     </p>
-    <p>
-        Somewhere between those conversations,  
-        you became my comfort, my habit, my favorite notification.
-    </p>
-    <p>
-        Days feel incomplete if I don’t hear your voice.
-    </p>
-    <a href="#memories" class="btn">Our Moments 💖</a>
+
+    <div class="gallery">
+        <img src="photo1.jpg">
+        <img src="photo2.jpg">
+        <img src="photo3.jpg">
+        <img src="photo4.jpg">
+        <img src="photo5.jpg">
+        <img src="photo6.jpg">
+        <img src="photo7.jpg">
+        <img src="photo8.jpg">
+        <img src="photo9.jpg">
+        <img src="photo10.jpg">
+        <img src="photo11.jpg">
+    </div>
 </section>
 
-<!-- SECTION 3 -->
-<section id="memories">
-    <h2>Our Memories</h2>
+<!-- SURPRISE POPUP -->
+<div class="popup" id="surprisePopup">
+  <div class="popup-box">
+    <h2>Only for My Bujji ❤️</h2>
     <p>
-        Shopping together.  
-        Movies side by side.  
-        Quiet walks and park evenings where time slowed down.
+        You are my comfort, my smile,  
+        and my favorite part of every day.
     </p>
-    <p>
-        Riding my bike and dropping you at office —  
-        moments that felt simple, but meant everything to me.
-    </p>
-    <p>
-        Dinners outside, shared laughter, comfortable silence —  
-        memories I replay without trying.
-    </p>
-    <a href="#care" class="btn">What You Mean 💝</a>
-</section>
+    <img src="photo1.jpg" style="width:100%;border-radius:15px;margin-top:15px">
+    <br><br>
+    <button class="btn" onclick="closeSurprise()">Close 💖</button>
+  </div>
+</div>
 
-<!-- SECTION 4 -->
-<section id="care">
-    <h2>Your Love, Your Care</h2>
-    <p>
-        You ordered dinner for me — not because you had to,  
-        but because you cared.
-    </p>
-    <p>
-        You bought me a bottle, carefully chose a t-shirt,  
-        and brought snacks from home — ariselu, jantikalu —  
-        things filled with love, not just taste.
-    </p>
-    <p>
-        Those gestures stayed with me.  
-        They always will.
-    </p>
-    <a href="#final" class="btn">For You, Bujji ❤️</a>
-</section>
+<script>
+let attempts = [
+  "Nice try 😏 but my Bujji would know better.",
+  "Hmm… that doesn’t sound like us 🤭 Try again.",
+  "Nope! But I like your confidence 😌",
+  "Almost… okay not really 😜"
+];
 
-<!-- SECTION 5 -->
-<section id="final">
-    <h2>My Birthday Wish for You</h2>
-    <p>
-        Monika, you are expressive, emotional, genuine —  
-        and that’s what makes you beautiful.
-    </p>
-    <p>
-        You don’t just exist in my life.  
-        You color it.
-    </p>
-    <p>
-        On your birthday, I want you to know this —
-        I choose you, Bujji, every single day.
-    </p>
-    <p>
-        Happy Birthday, my favorite person. 🎂❤️
-    </p>
-</section>
+let tryCount = 0;
 
-<footer>
-    With all my heart, <br>
-    <strong>Your Bujji ❤️</strong>
-</footer>
+function playMusic() {
+  document.getElementById("music").play();
+}
+
+function openGallery() {
+  document.getElementById("passwordModal").style.display = "flex";
+  window.targetAction = "gallery";
+}
+
+function openSurprise() {
+  document.getElementById("passwordModal").style.display = "flex";
+  window.targetAction = "surprise";
+}
+
+function checkPassword() {
+  const pass = document.getElementById("passwordInput").value;
+  const error = document.getElementById("errorMsg");
+
+  if (pass === "Bujji") {
+    document.getElementById("passwordModal").style.display = "none";
+    error.innerHTML = "";
+    if (window.targetAction === "gallery") {
+        document.getElementById("gallerySection").style.display = "block";
+        document.getElementById("gallerySection").scrollIntoView({behavior:"smooth"});
+    } else {
+        document.getElementById("surprisePopup").style.display = "flex";
+    }
+  } else {
+    error.innerHTML = attempts[tryCount % attempts.length] + "<br>Try your luck again 💕";
+    tryCount++;
+  }
+}
+
+function closeSurprise() {
+  document.getElementById("surprisePopup").style.display = "none";
+}
+</script>
 
 </body>
 </html>

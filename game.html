@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Game ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+ margin:0;
+ font-family:Georgia,serif;
+ background:linear-gradient(135deg,#ffe0ec,#fff7fb);
+ color:#4a1c2a;
+ overflow:hidden;
+}
+
+/* HEADER */
+header{
+ padding:15px;
+ text-align:center;
+ font-size:18px;
+ background:#ffd6e7;
+}
+
+/* AVATAR */
+.avatar-wrap{
+ display:flex;
+ justify-content:center;
+ gap:25px;
+ margin-top:20px;
+}
+
+.avatar{
+ width:80px;
+ height:80px;
+ border-radius:50%;
+ object-fit:cover;
+ box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+/* GAME CARD */
+.game-box{
+ width:90%;
+ max-width:600px;
+ margin:40px auto;
+ background:#fff0f6;
+ padding:35px;
+ border-radius:25px;
+ text-align:center;
+ box-shadow:0 15px 35px rgba(0,0,0,.15);
+ position:relative;
+}
+
+.question{
+ font-size:1.4em;
+ min-height:80px;
+}
+
+.btn{
+ padding:14px 28px;
+ border:none;
+ border-radius:40px;
+ background:linear-gradient(45deg,#ff6f91,#ff3f6f);
+ color:white;
+ cursor:pointer;
+ margin:15px;
+ font-size:16px;
+ transition:0.2s;
+}
+
+.score{
+ text-align:center;
+ font-size:20px;
+ margin-top:10px;
+}
+
+/* PROPOSAL SCREEN */
+.proposal{
+ position:fixed;
+ inset:0;
+ display:none;
+ justify-content:center;
+ align-items:center;
+ background:rgba(0,0,0,.8);
+ color:white;
+ text-align:center;
+ z-index:3000;
+}
+
+.proposal-box{
+ background:#ff6f91;
+ padding:50px;
+ border-radius:30px;
+ animation:pop 0.8s ease;
+}
+
+@keyframes pop{
+ from{transform:scale(0.4); opacity:0;}
+ to{transform:scale(1); opacity:1;}
+}
+
+/* MINI GAME */
+.story{
+ position:fixed;
+ inset:0;
+ display:none;
+ background:rgba(0,0,0,.85);
+ color:white;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ z-index:2500;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+Your Bujji is typing...
+</header>
+
+<audio id="music" loop>
+<source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3">
+</audio>
+
+<div class="avatar-wrap">
+<img src="img/he.png" class="avatar">
+<img src="img/she.png" class="avatar">
+</div>
+
+<div class="score" id="scoreText"> Level: 0%</div>
+
+<div class="game-box">
+<div class="question" id="question"></div>
+
+<button class="btn" id="yesBtn">Yes ❤️</button>
+<button class="btn" id="noBtn">No 😌</button>
+</div>
+
+<!-- MINI STORY GAME -->
+<div class="story" id="storyGame">
+<div>
+<h2>Story 🌸</h2>
+<p>You met me… what will you do?</p>
+<button class="btn" onclick="endStory()">Hold Hands 🤝</button>
+</div>
+</div>
+
+<!-- FINAL PROPOSAL -->
+<div class="proposal" id="proposal">
+<div class="proposal-box">
+<h1>Will You Stay With Me Forever?🧑‍🤝‍🧑 </h1>
+<p>Never say No 😉</p>
+</div>
+</div>
+
+<script>
+const questions=[
+"Are you mine forever? 😌",
+"Will you tolerate my drama? 😏",
+"Do you secretly miss me? 😜",
+"Should we annoy each other forever? 😂",
+"Are you proud to show me off? 😎"
+];
+
+let qIndex=0;
+let score=0; // RESET EVERY REFRESH
+
+const qEl=document.getElementById("question");
+const scoreEl=document.getElementById("scoreText");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+
+/* UPDATE UI */
+function updateUI(){
+ qEl.innerText=questions[qIndex];
+ scoreEl.innerText="Level: "+score+"%";
+}
+updateUI();
+
+/* YES CLICK */
+yesBtn.onclick=()=>{
+ score+=Math.floor(100/questions.length);
+ if(score>100) score=100;
+ nextQuestion();
+};
+
+/* NO CLICK (WORKS + NEXT QUESTION) */
+noBtn.onclick=()=>{
+ nextQuestion();
+};
+
+/* NEXT QUESTION */
+function nextQuestion(){
+ qIndex++;
+ if(qIndex>=questions.length){
+  openStoryGame();
+ }else{
+  updateUI();
+ }
+}
+
+/* YES BUTTON AI FOLLOW CURSOR */
+document.addEventListener("pointermove",(e)=>{
+ const rect=yesBtn.getBoundingClientRect();
+ const dx=e.clientX-(rect.left+rect.width/2);
+ const dy=e.clientY-(rect.top+rect.height/2);
+ yesBtn.style.transform=`translate(${dx*0.05}px,${dy*0.05}px)`;
+});
+
+/* STORY GAME */
+function openStoryGame(){
+ document.getElementById("storyGame").style.display="flex";
+}
+
+function endStory(){
+ document.getElementById("storyGame").style.display="none";
+ showProposal();
+}
+
+/* FINAL PROPOSAL */
+function showProposal(){
+ document.getElementById("proposal").style.display="flex";
+}
+
+/* CHEAT CODE */
+let cheat="";
+document.addEventListener("keydown",(e)=>{
+ cheat+=e.key.toLowerCase();
+ if(cheat.includes("yes")){
+  alert("💖You are my destiny.💖");
+  cheat="";
+ }
+});
+
+/* MUSIC */
+window.addEventListener("click",()=>{
+ document.getElementById("music").play().catch(()=>{});
+},{once:true});
+
+/* FAKE GF STATUS */
+setInterval(()=>{
+ document.querySelector("header").innerText =
+ Math.random()>0.5 ?
+ "Bujji is typing..." :
+ "Bujji is thinking about you...";
+},3000);
+
+</script>
+
+</body>
+</html>
